@@ -1,0 +1,147 @@
+﻿<?php
+/**
+ * OFT Framework
+ *
+ * @package    Oft
+ * @subpackage Layouts
+ */
+
+// Récupération de la vue sous la variable $view
+$view = $this;
+
+// Ajout de l'initialisation du menu
+if (count($view->menuBar())) {
+    $view->menuBar()->addOnLoad();
+}
+
+// Type de contenu
+echo $view->doctype();
+?>
+<html>
+<head>
+<?php
+    echo $view->headTitle();
+    echo $view->headMeta();
+    echo $view->headLink();
+    echo $view->headStyle();
+    echo $view->headScript();
+    echo $view->jQuery();
+?>
+
+<!-- pour laisser de la place à la barre de menu  -->
+<style type="text/css">body {padding-top: 60px; padding-bottom: 40px;}</style>
+
+</head>
+<body >
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="brand" href="<?php echo $this->baseUrl();?>index">
+				<img src="<?php echo $this->baseUrlMedia('arzf/images/ar-grisclair-30x20.png');?>"></a>
+			<div id="menu-top">
+				<?php
+					//echo $view->menuBar()->addItem(array('name' => 'toto'));
+					if (count($view->menuBar())) {
+						echo $view->menuBar();
+					} else {
+						echo "&nbsp;";
+					}
+				?>
+			</div>
+			<form class="navbar-form pull-right" action="<?php echo $this->baseUrl();?>auth/logout">
+				<!--<b>Bonjour <?php //echo $view->getCurrentIdentity()->getName(); ?> </b>-->
+				<button class="btn" type="submit">Déconnexion</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+    <?php if (count($this->rail())) : ?>
+        <div id="rail">
+            <?php echo $this->rail(); ?>
+        </div>
+    <?php else : ?>
+        <div id="norail"></div>
+    <?php endif; ?>
+</div>
+
+<div class="container">
+    <?php if (count($view->leftMenu())) : ?>
+        <div class="row">
+			<div id="leftmenu" class="span3">
+				<?php echo $view->leftMenu(); ?>
+			</div>
+			<div class="span9">
+				<?php
+					$flashMessages = $view->flashMessenger();
+					if (!empty($flashMessages)) {
+						echo '<div id="messages">';
+						echo $flashMessages;
+						echo '</div>';
+					}
+				?>
+				<div id="content">
+					<br/>
+					<?php echo $view->layout()->content ?>
+				</div>
+			</div>
+		</div>
+    <?php else : ?>
+		<?php
+			$flashMessages = $view->flashMessenger();
+			if (!empty($flashMessages)) {
+				echo '<div id="messages">';
+				echo $flashMessages;
+				echo '</div>';
+			}
+		?>
+		<div id="content">
+			<?php echo $view->layout()->content ?>
+		</div>
+
+    <?php endif; ?>
+
+</div>
+<div class="container">
+    
+    <?php if (count($this->actionBar())) : ?>
+    <div id="actionBar">
+        <?php echo $this->actionBar(); ?>
+    </div>
+    <?php endif; ?>
+    
+    <div id="footer">
+    <?php
+        if (count($view->footer())) {
+            echo $view->footer();
+        }
+    ?>
+    </div>
+    <?php if (Oft_Debug::isDebug()) : ?>
+    <div id="page-timer">
+        <?php echo $this->getAppProfiler()->getTime() / 1000; ?>s
+    </div>
+    <?php endif; ?>
+</div>
+<div class="plzwait">
+	Veuillez patienter :<br>
+	Chargement des données en cours.<br>
+	<img alt="" src="<?php echo $this->baseUrlMedia('arzf/images/ajax-loader_blue.gif')?>">
+</div>
+
+<script type="text/javascript" >
+//<!--
+$(document).ready(function() {
+    $('#ui-datepicker-div').css('clip', 'auto');
+    //$('.ui-datepicker-trigger').addClass('btn');
+	$('button').addClass('btn');
+	$('#submit').addClass('btn');
+});
+// -->
+</script>
+
+
+</body>
+</html>

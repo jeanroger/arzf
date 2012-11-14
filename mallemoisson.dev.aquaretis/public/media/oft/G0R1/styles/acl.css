@@ -1,0 +1,106 @@
+@CHARSET "UTF-8";
+
+table.oftAcl {
+    border-spacing:1px;
+    width : auto;
+}
+td.oftAcl {
+    width : auto;
+    padding-bottom: 1px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 1px;
+    vertical-align: text-top;
+    
+}
+.oftAclRole, .oftAclRoleTitle, .oftAclResource, .oftAclResourceTitle, .oftAclPrivilege, .oftAclPrivilegeTitle, .oftAclResourcePrivilege, 
+.oftAclLegacyDirect, .oftAclLegacyPossible, .oftAclLegacyIndirect,  .oftAclLegacyImpossible, 
+.oftAclAccess, .oftAclAccessAllow, .oftAclAccessAllowLegacy, .oftAclAccessDeny, .oftAclAccessDenyLegacy {
+    text-align : center;
+    padding-bottom: 1px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 1px;
+}
+.oftAclResource, .oftAclPrivilege, .oftAclLegacyDirect, .oftAclLegacyPossible, 
+.oftAclAccess, .oftAclAccessAllow, .oftAclAccessAllowLegacy, .oftAclAccessDeny, .oftAclAccessDenyLegacy {
+    cursor : pointer;
+}
+.oftAclResourceAll, .oftAclPrivilegeAll {
+    text-align : right;
+    padding-bottom: 1px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 1px;
+}
+
+.oftAclRoleTitle {
+    background-color: #cc3333;
+    color: #000;
+}
+.oftAclRole {
+    background-color: #FFCC99;
+    color: #000;
+}
+.oftAclResourceTitle {
+    background-color: #f9e600;
+    color: #000;
+}
+.oftAclResource {
+    background-color: #FFFF99;
+    color: #000;
+}
+.oftAclResourceAll {
+    background-color: #FFFF33;
+    color: #000;
+}
+.oftAclPrivilegeTitle {
+    background-color: #cc3333;
+    color: #fff;
+}
+.oftAclPrivilege {
+    background-color: #FFCC99;
+    color: #000;
+}
+.oftAclPrivilegeAll {
+    background-color: #FFCC33;
+    color: #000;
+}
+
+.oftAclLegacyDirect {
+    background-color: #ff3333;
+    color: #fff;
+}
+.oftAclLegacyPossible {
+    background-color: #eeeeee;
+    color: #fff;
+}
+.oftAclLegacyImpossible {
+    background-color: #ccc;
+    color: #fff;
+}
+.oftAclLegacyIndirect {
+    background-color: #fec5b1;
+    color: #fff;
+}
+
+.oftAclAccess {
+    background-color: #eee;
+    color: #999;
+}
+.oftAclAccessAllow {
+    background-color: #0000ff;
+    color: #fff;
+}
+.oftAclAccessAllowLegacy {
+    background-color: #ccccff;
+    color: #000;
+}
+.oftAclAccessDeny {
+    background-color: #ff0000;
+    color: #fff;
+}
+.oftAclAccessDenyLegacy {
+    background-color: #ffcccc;
+    color: #fff;
+}

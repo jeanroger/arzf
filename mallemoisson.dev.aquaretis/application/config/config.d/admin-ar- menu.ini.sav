@@ -1,0 +1,34 @@
+[global]
+menubar.arzf-admin.name = "Administration AR"
+menubar.arzf-admin.position = 1000 ; Toujours à la fin du menu
+menubar.arzf-admin.roles = administrators
+
+menubar.arzf-admin.submenu.users.name            = Utilisateurs
+menubar.arzf-admin.submenu.users.link.action     = index 
+menubar.arzf-admin.submenu.users.link.controller = users
+menubar.arzf-admin.submenu.users.link.module     = arzf-admin
+
+menubar.arzf-admin.submenu.roles.name            = "Groupes"
+menubar.arzf-admin.submenu.roles.link.action     = index 
+menubar.arzf-admin.submenu.roles.link.controller = roles
+menubar.arzf-admin.submenu.roles.link.module     = arzf-admin
+
+menubar.arzf-admin.submenu.role-user.name            = "Associations utilisateurs / groupes"
+menubar.arzf-admin.submenu.role-user.link.action     = index
+menubar.arzf-admin.submenu.role-user.link.controller = role-user
+menubar.arzf-admin.submenu.role-user.link.module     = arzf-admin
+
+menubar.arzf-admin.submenu.resources.name            = Ressources MVC
+menubar.arzf-admin.submenu.resources.link.action     = index 
+menubar.arzf-admin.submenu.resources.link.controller = resources
+menubar.arzf-admin.submenu.resources.link.module     = arzf-admin
+
+menubar.arzf-admin.submenu.heritage.name            = "Héritage des groupes"
+menubar.arzf-admin.submenu.heritage.link.action     = heritage
+menubar.arzf-admin.submenu.heritage.link.controller = acl
+menubar.arzf-admin.submenu.heritage.link.module     = arzf-admin
+
+menubar.arzf-admin.submenu.acl.name            = "Permissions d'accès des groupes"
+menubar.arzf-admin.submenu.acl.link.action     = acl
+menubar.arzf-admin.submenu.acl.link.controller = acl
+menubar.arzf-admin.submenu.acl.link.module     = arzf-admin

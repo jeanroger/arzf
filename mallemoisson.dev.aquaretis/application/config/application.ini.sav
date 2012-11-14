@@ -1,0 +1,66 @@
+;;;;;;;;;;;;;;;;;;;;;;
+;; VALEURS GLOBALES ;;
+;;;;;;;;;;;;;;;;;;;;;;
+[global]
+; Nom de l'application - utilisé dans le titre de la page
+app.name = ""
+; Prefixe applicatif
+;app.prefix = App
+;app.identityStoreClass = Oft_Model_Table_Users
+;app.contact_name = "Administrateur"
+;app.contact_url  = "mailto:someone@orange-ftgroup.com" 
+;app.entity  = "FT/SI/DDSI/APT/MOD" 
+;app.auth_title = "Connexion à l'application" 
+
+; Configuration du layout de l'application
+;resources.layout.layoutPath = OFT_ROOT "/application/layouts"
+;resources.layout.layout     = "oft"
+
+; Configuration de la vue
+resources.view.title = "Titre par défaut"
+
+; Configuration du fichier de log
+;resources.log.stream.writerParams.stream = TEMP_DIR "/oft-application.log"
+
+; Plugins de contrôleur spécifiques - le nom du plugin (ici "xxx") n'a pas d'importance
+;resources.frontcontroller.plugins.xxx.class  = App_Controller_Plugin_Xxx
+;resources.frontcontroller.plugins.xxx.params = 
+
+; Méthode d'authentification explicite (DbTable, Gassi ou Mock)
+;resources.auth.adapterClass=Oft_Auth_Adapter_DbTable
+
+; Chaînes de traduction
+;resources.translation.labels.adapter = Ini
+;resources.translation.labels.content = APP_ROOT "/application/translations/%LANG%/labels.ini"
+
+; Locale par défaut
+resources.locale.default = "fr_FR"
+resources.locale.force = 1
+
+
+;;;;;;;;;;;;;;;;
+;; PRODUCTION ;;
+;;;;;;;;;;;;;;;;
+[prod : global]
+
+
+;;;;;;;;;;;;;;;;;;;;
+;; PRE-PRODUCTION ;;
+;;;;;;;;;;;;;;;;;;;;
+[preprod : global]
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; TESTS UNITAIRES ;;
+;;;;;;;;;;;;;;;;;;;;;
+[test : global]
+
+
+;;;;;;;;;;;;;;;;;;;
+;; DEVELOPPEMENT ;;
+;;;;;;;;;;;;;;;;;;;
+[dev : global]
+
+; Logs de requêtes vers FirePHP (extension Firefox)
+;resources.db.params.profiler.enabled = "true"
+;resources.db.params.profiler.class = "Zend_Db_Profiler_Firebug"

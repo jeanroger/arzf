@@ -1,0 +1,24 @@
+; this is an INI file
+[global]
+menubar.data.name = 'Conf des mesures'
+
+menubar.data.submenu.datasettypes.name = "Types de dataset"
+menubar.data.submenu.datasettypes.link.action = index
+menubar.data.submenu.datasettypes.link.controller = dataset-types
+menubar.data.submenu.datasettypes.link.module=arzf-data
+
+menubar.data.submenu.dataset.name = "Datasets"
+menubar.data.submenu.dataset.link.action = index
+menubar.data.submenu.dataset.link.controller = datasets
+menubar.data.submenu.dataset.link.module=arzf-data
+
+menubar.data.submenu.data.name = "Données affichées"
+menubar.data.submenu.data.link.action = index
+menubar.data.submenu.data.link.controller = rendered-datas
+menubar.data.submenu.data.link.module=arzf-data
+
+menubar.data.submenu.alarm.name = "Alarmes"
+menubar.data.submenu.alarm.link.action = index
+menubar.data.submenu.alarm.link.controller = alarms
+menubar.data.submenu.alarm.link.module=arzf-data
+

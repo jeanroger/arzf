@@ -1,0 +1,34 @@
+# Fichier htaccess du projet
+
+# Definition des charsets par defaut
+AddDefaultCharset utf-8
+AddCharset utf-8 .css
+AddCharset utf-8 .js
+
+# Desactive les magic_quotes
+<IfModule php5_module>
+  php_value magic_quotes_gpc 0
+  php_value magic_quotes_runtime 0
+  php_value magic_quotes_sybase 0
+  php_value date.timezone Europe/Paris
+</IfModule>
+
+# Permet les regles de reecritures
+Options +FollowSymLinks
+
+# Reecriture des URL
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-s
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule !\.(js|ico|gif|jpg|png|css)$ index.php [NC,L]
+
+# Environnement d'execution
+SetEnv APP_ENV dev
+SetEnv OFT_ROOT "/home/it4env/zendframework/vendors/Oft_Framework-G0R1C5"
+SetEnv ZF_ROOT "/home/it4env/zendframework/vendors/ZendFramework-1.10.7"
+
+# Flags d'optimisation
+SetEnv OPTIM_CONFIG   1
+SetEnv OPTIM_RESOURCE 1
+SetEnv OPTIM_CLASSMAP 1

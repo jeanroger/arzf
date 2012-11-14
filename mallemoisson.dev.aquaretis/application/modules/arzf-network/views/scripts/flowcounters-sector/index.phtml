@@ -1,0 +1,122 @@
+<?php
+/**
+ * Vue par défaut de l'application
+ *
+ * @package App
+ */
+$this->subTitle('Framework OFT');
+?>
+<div align="center">
+<?php
+/* @var $acl Oft_Acl */
+$acl = $this->acl;
+
+$count = count($acl->getRoles()) + 1;
+$width = ceil(100/$count);
+
+echo '<table class="datagrid ui-widget ui-widget-content">
+    <tr>
+        <th class="ui-widget-header" width="' . $width . '%">'
+        . __('Ressource')
+        . '</th>
+        <th class="ui-widget-header" colspan=' . ($count-1) . '>'
+        . __('Groupe')
+        . '</th>
+    </tr>
+    <tr>
+    	<td>&nbsp;</td>';
+
+foreach ($acl->getRoles() as $role) {
+    // Impossible de modifier les informations pour l'administrateur
+    if ($role==='administrators') {
+        continue;
+    }
+    
+    echo '<th width="' . $width . '%">'
+        . $this->escape($role).'</th>';
+}
+echo '</tr>';
+
+foreach ($acl->getMvcResources() as $mvcResource) {
+    echo '<tr>';
+
+    $resource = Oft_Acl::getResourceFromMvc($mvcResource);
+    $resourceName = $resource;
+
+    echo '<th>' . $resourceName . '</th>';
+
+    foreach ($acl->getRoles() as $idrole => $role) {
+        // Impossible de modifier les informations pour l'administrateur
+        if ($role==='administrators') {
+            continue;
+        }
+        
+        $onClick = "document.location='"
+            . $this->smartUrl(
+                'acl', 'acl', null, array(
+                    'aclAction' => 'changePrivilege',
+                    'role' => $role,
+                    'resource' => $resource,
+                )
+            ) . "'";
+
+        $title = $this->escape("Modifie l'accès de '$role' à '$resourceName'");
+        if ($acl->isMvcAllowed($role, $mvcResource)) {
+            $val = 'A';
+            if ($acl->isRuleDefined($role, $resource)) {
+                $class = 'oftAclAccessAllow';
+            } else {
+                $class = 'oftAclAccessAllowLegacy';
+            }
+        } else {
+            $val = 'D';
+            if ($acl->isRuleDefined($role, $resource)) {
+                $class = 'oftAclAccessDeny';
+            } else {
+                $class = 'oftAclAccess';
+
+                // Recherche d'un deny par héritage
+                $definedResources =
+                    $acl->getDefinedMvcResources($role, $mvcResource);
+                foreach ($definedResources as $definedResource) {
+                    if ($acl->isRuleDefined($role, $definedResource) && !$acl->isAllowed($role, $definedResource)) {
+                        $class = 'oftAclAccessDenyLegacy';
+                    }
+                }
+            }
+        }
+        echo '<td class="'.$class.'" onclick="'.$onClick.'" title="'.$title.'" >' . $val . '</td>';
+    }
+    echo '</tr>';
+}
+echo '</table>';
+
+?>
+</div>
+
+<?php if ($this->form) : ?>
+<?php
+if ($this->ruleExists) {
+    $type = "Modifier";
+} else {
+    $type = "Créer";
+}
+?>
+<div>
+<h3><?php echo $type; ?> l'accès de '<?php echo $this->role ?>' à '<?php echo $this->resource ?>'</h3>
+<?php
+echo $this->form;
+?>
+</div>
+<?php endif; ?>
+
+<br />
+<br />
+<h3><?php echo __('Légende')?> :</h3>
+<table>
+    <tr><td class="oftAclAccess" title="">D</td><td class="oftAcl"><?php echo __('Non défini');?></td></tr>
+    <tr><td class="oftAclAccessAllow" title="" >A</td><td class="oftAcl"><?php echo __('Valide');?></td></tr>
+    <tr><td class="oftAclAccessAllowLegacy" title="" >A</td><td class="oftAcl"><?php echo __('Valide par héritage');?></td></tr>
+    <tr><td class="oftAclAccessDeny" title="" >D</td><td class="oftAcl"><?php echo __('Interdit');?></td></tr>
+    <tr><td class="oftAclAccessDenyLegacy" title="" >D</td><td class="oftAcl"><?php echo __('Interdit par héritage');?></td></tr>
+</table>

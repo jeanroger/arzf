@@ -1,0 +1,111 @@
+<?php
+/**
+ * Vue par défaut de l'application
+ *
+ * @package App
+ */
+$this->subTitle('Supervision > Environnnement technique');
+$html = $this->html();
+
+$hostsContent = '<div id="hosts" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">';
+foreach ($this->hosts as $hostId => $hostInfo)
+{
+    $hostsContent .= '
+        <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+            <span class="ui-icon ui-icon-triangle-1-e"></span>
+            <a href="#">Site : '. $hostInfo['sitename'] .' - Numéro de série de l\'entegistreur : '.$hostInfo['serial'].'</a>
+        </h3>';
+    $hostsContent .= '
+        <div id="'. $hostId .'"class="envcontent" style="width: 940px; height: 560px">mesures d\'environement
+        </div>';
+};
+$hostsContent .= '</div>';
+echo $hostsContent;
+
+?>
+
+<script type="text/javascript">
+//<!--
+$(document).ready(function() {
+    $('.plzwait').ajaxStart(function() { 
+        $('.plzwait').show(); 
+    });
+
+    $('.envcontent').each(function(index){
+        var noId = ($(this).attr('id'));
+		$.getJSON('<?php echo $this->smartUrl('getenvdata') ?>'+'/noid/'+noId, function(data) {
+			var tslength = data.ts.length, temp = [], voltage = [], level = [];
+			for (i=0; i<tslength; i++) {
+            	temp.push([
+                         data.ts[i]*1000, //le timestamp
+                         data.temp[i] //la temp
+                     ]);
+            	level.push([
+                           data.ts[i]*1000, //le timestamp
+                           data.level[i] //
+                       ]);
+            	voltage.push([
+                           data.ts[i]*1000, //le timestamp
+                           data.voltage[i] //
+                       ]);
+			}
+			
+			$('#'+noId).text(JSON.stringify(data.ts));
+			window['env-'+noId] = new Highcharts.StockChart({
+                chart: {
+                    renderTo: noId,
+                    alignTicks: false
+                },
+                rangeSelector: {enabled: false},
+                yAxis: [{
+                    title: {text: 'Tension batterie'},
+                    height: 150,
+                    offset: 0,
+                    min: 0
+				},{
+                    title: {text: 'Niveau GSM (1-100)'},
+                    top:160,
+                    height: 150,
+                    offset: 0,
+                    min: 0
+				},{
+                    title: {text: 'Température'},
+                    top:310,
+                    height: 150,
+                    offset: 0
+				}],
+                series: [{
+	                type: 'line',
+                	name: 'voltage',
+                	data: voltage
+                }, {
+                    type: 'line',
+                    name: 'level',
+                    yAxis: 1,
+                    data: level
+                }, {
+                    type: 'line',
+                    name: 'temp',
+                    yAxis: 2,
+                    data: temp
+				}]
+			});
+		});
+	});
+		
+    $('.plzwait').ajaxStop(function() { 
+        $(this).hide(); 
+	});
+    
+    $('#hosts .ui-accordion-header').click(function() {
+        var content = $(this).next();
+        content.toggle('slow');
+        $("span.ui-icon-triangle-1-e", this).toggleClass('ui-icon-triangle-1-s');
+        var contentId = content.attr('id');
+        
+		return false;
+    }).next().hide();
+    
+});
+//-->
+</script>

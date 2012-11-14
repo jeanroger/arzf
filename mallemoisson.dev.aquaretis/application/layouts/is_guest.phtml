@@ -1,0 +1,55 @@
+<?php
+/**
+ * OFT Framework
+ *
+ * @package    Oft
+ * @subpackage Layouts
+ */
+
+// Récupération de la vue sous la variable $view
+$view = $this;
+
+// Type de contenu
+echo $view->doctype();
+?>
+<html>
+<head>
+<?php
+    echo $view->headTitle();
+    echo $view->headMeta();
+    echo $view->headLink();
+    echo $view->headStyle();
+    echo $view->headScript();
+    echo $view->jQuery();
+?>
+</head>
+<body >
+<div class="container">
+	<center>
+		<img src="<?php echo $this->baseUrlMedia('arzf/images/logoentier-960x200.png');?>">
+		<br>
+			<h3>Solution de Télésurveillance des Réseaux AEP - Version ZF de Dev</h3>
+		<br>
+		<h4>Vous devez être authentifié pour accéder à l'application</h4>
+		<br>
+		<?php
+			$flashMessages = $view->flashMessenger();
+			if (!empty($flashMessages)) {
+				echo '<div id="messages">';
+				echo $flashMessages;
+				echo '</div>';
+			}
+		?>
+		<div id="content">
+			<?php echo $view->layout()->content ?>
+		</div>
+		<div>
+			<?php if ( strpos( $_SERVER['HTTP_USER_AGENT'], 'Firefox' ) == FALSE ) { 
+			    echo "Attention ce prototype n'a été testé que pour Firefox.<br>
+        			Avec un autre navigateur vous l'affichage risque de ne pas être optimal.<br>"; }
+			?>
+		</div>
+</div>
+
+</body>
+</html>

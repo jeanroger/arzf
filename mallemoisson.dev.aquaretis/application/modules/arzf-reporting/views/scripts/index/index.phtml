@@ -1,0 +1,152 @@
+<?php
+/**
+ * Vue par défaut de l'application
+ *
+ * @package App
+ */
+$this->subTitle('Module de reporting');
+
+echo $this->dialogContainer(
+    'no-selection',
+    'Vous n\'avez pas sélectionné de série de donnée',
+    array(
+        'autoOpen' => false,
+        'modal' => true,
+        'title' => 'ATTENTION !!',
+        'buttons'  => array(
+            'Fermer' => new Zend_Json_Expr(
+                'function() { $(this).dialog("close") }'
+            ),
+        ),
+    )
+);
+echo $this->dialogContainer(
+    'download-arch',
+    'Votre sélection n\'est pas valide',
+    array(
+        'autoOpen' => false,
+        'modal' => true,
+        'title' => 'Export de données brutes',
+            'buttons'  => array(
+            'Modifier' => new Zend_Json_Expr(
+                'function() { $(this).dialog("close") }'
+            ),
+        ),
+    )
+);
+?>
+
+<div id="maindiv" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
+	<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+		<span class="ui-icon ui-icon-triangle-1-e"></span>
+		<a href="#">Export de données brutes</a>
+	</h3>
+	<div id="exportdiv" style="width: 940px;">
+		<form action="">
+			<h5>1 - Selectionnez une période :</h5>
+				<div class="controls controls-row" style="padding-left: 22px;">
+					<input class="span3 datepickerinput" type="text" id="from" name="from"/>
+					<input class="span3 datepickerinput" type="text" id="to" name="to"  placeholder="Date de fin"/>
+				</div>
+				
+			<h5>2 - Selectionnez les séries désirées :</h5>
+			<div style="padding-left: 22px;">
+				<table id="xportList"></table> 
+				<div id="xportPager"></div>
+			</div> 
+			<h5>3 - <a href="javascript:void(0)" id="xportsubmit" class="btn">Générer l'archive</a></h5>
+			</form>
+	</div>
+	<h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+		<span class="ui-icon ui-icon-triangle-1-e"></span>
+		<a href="#">Elaboration de rapports</a>
+	</h3>
+	<div id="reportdiv" style="width: 940px;">
+		<div id="messages"><ul class="flashmessages">
+			<li class="info"> Edition interractive de rapport d'exploitation au format PDF.</li>
+			<li class="warning"> Fonctionnalité en cours de développement</li>
+		</ul></div>
+		
+	</div>
+</div>
+
+<script type="text/javascript">
+//<!--
+$(document).ready(function() {
+    $('#maindiv .ui-accordion-header').click(function() {
+        var content = $(this).next();
+        content.toggle('slow');
+        $("span.ui-icon-triangle-1-e", this).toggleClass('ui-icon-triangle-1-s');
+        var contentId = content.attr('id');
+        
+		return false;
+    }).next().hide();
+    
+        $( "#from" ).datepicker({
+            showOn: "focus",
+            dateFormat: 'dd-mm-yy',
+            onClose: function( selectedDate ) {
+                $( "#to" ).datepicker( "option", "minDate", selectedDate );
+            }
+        }).datepicker( "setDate" , '-7');
+        $( "#to" ).datepicker({
+            showOn: "focus",
+            dateFormat: 'dd-mm-yy',
+            onClose: function( selectedDate ) {
+                $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        }).datepicker( "setDate" , 'now');
+
+	jQuery("#xportList").jqGrid({ 
+        url:'<?php echo $this->smartUrl('getdslist') ?>', 
+        datatype: "json", 
+        colNames:['Nom du dataset','Type du dataset', 'Site'], 
+        colModel:[ 
+            {name:'dsname',index:'dsname', width:120}, 
+            {name:'type',index:'type', width:500}, 
+            {name:'site',index:'site', width:200}],
+        rowNum:10, 
+        rowList:[10,50,100], 
+        pager: '#xportPager', 
+        sortname: 'dsname', 
+        recordpos: 'left', 
+        viewrecords: true, 
+        sortorder: "desc", 
+        multiselect: true,
+        height : 'auto', 
+        caption: "" 
+    }); 
+    jQuery("#xportList").jqGrid('navGrid','#xportPager',{add:false,del:false,edit:false,position:'right'});
+    var myGrid = $("#xportList");
+    $("#cb_"+myGrid[0].id).hide();
+    
+    $("#xportsubmit").click( function() { 
+        var slctds, 
+        	from = $('#from').datepicker("getDate").getTime() / 1000, 
+        	to = $('#to').datepicker("getDate").getTime() / 1000;
+        slctds = jQuery("#xportList").jqGrid('getGridParam','selarrrow');
+        if(slctds.length == 0) {
+        	$("#no-selection").dialog("open"); return;
+        }
+        
+        $.getJSON('<?php echo $this->smartUrl('compilexport') ?>'+'/from/'+from+'/to/'+to+'/slctds/'+slctds, function(data) { 
+        	if (data['nbvalidds'] != 0) {
+				$("#download-arch").html('<a href="'+'<?php echo $this->smartUrl('downloadxportfile') ?>'+'/zipfile/'+data['zipfile']+'">Lancer le téléchargement</a>');
+				$("#download-arch").dialog( "option", "buttons", [
+	                {
+		                text: "Annuler ou terminer",
+		                click: function() { 
+							$.get('<?php echo $this->smartUrl('cleanxportfile') ?>'+'/zipfile/'+data['zipfile']);
+			                $(this).dialog("close"); 
+			            }
+	                }
+                ] );
+				$("#download-arch").dialog("open");
+			} else {
+				$("#download-arch").dialog("open");
+			}
+		}); 
+	}); 
+});
+//-->
+</script>

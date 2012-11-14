@@ -1,0 +1,139 @@
+<?php
+/**
+ * OFT Framework
+ *
+ * @package    Oft
+ * @subpackage Layouts
+ */
+
+// Récupération de la vue sous la variable $view
+$view = $this;
+
+// Ajout de l'initialisation du menu
+if (count($view->menuBar())) {
+    $view->menuBar()->addOnLoad();
+}
+
+// Type de contenu
+echo $view->doctype();
+?>
+<html>
+<head>
+<?php
+    echo $view->headTitle();
+    echo $view->headMeta();
+    echo $view->headLink();
+    echo $view->headStyle();
+    echo $view->headScript();
+    echo $view->jQuery();
+?>
+</head>
+<body >
+
+<div class="container_24">
+
+    <div id="header">
+        <div class="grid_24">
+        <?php
+            echo $view->userInfos();
+        ?>
+        </div>
+        <div class="clear"></div>
+        
+        <div class="grid_2">
+            <a href="<?php echo $view->baseUrl(); ?>">
+            </a>
+        </div>
+        <div class="grid_22">
+            <?php echo $view->title() ?>
+        </div>
+        <div class="clear"></div>
+    </div>
+    
+    <div id="menu-top" class="grid_24">
+        <?php
+            if (count($view->menuBar())) {
+                echo $view->menuBar();
+            } else {
+                echo "&nbsp;";
+            }
+        ?>
+    </div>
+    <div class="clear"></div>
+
+    <div class="grid_24">
+    <?php if (count($this->rail())) : ?>
+        <div id="rail">
+            <?php echo $this->rail(); ?>
+        </div>
+    <?php else : ?>
+        <div id="norail"></div>
+    <?php endif; ?>
+    </div>
+    <div class="clear"></div>
+
+    <?php if (count($view->leftMenu())) : ?>
+        <div id="leftmenu" class="grid_4">
+            <?php echo $view->leftMenu(); ?>
+        </div>
+    
+        <div class="grid_20">
+            <?php
+                if (count($view->subTitle())) {
+                    echo $view->subTitle();
+                }
+                
+                $flashMessages = $view->flashMessenger();
+                if (!empty($flashMessages)) {
+                    echo '<div id="messages">';
+                    echo $flashMessages;
+                    echo '</div>';
+                }
+            ?>
+            <div id="content">
+                <?php echo $view->layout()->content ?>
+            </div>
+        </div>
+    <?php else : ?>
+        <div class="grid_24">
+            <?php
+                if (count($view->subTitle())) {
+                    echo $view->subTitle();
+                }
+                
+                $flashMessages = $view->flashMessenger();
+                if (!empty($flashMessages)) {
+                    echo '<div id="messages">';
+                    echo $flashMessages;
+                    echo '</div>';
+                }
+            ?>
+            <div id="content">
+                <?php echo $view->layout()->content ?>
+            </div>
+        </div>
+    <?php endif; ?>
+    <div class="clear"></div>
+    
+    <?php if (count($this->actionBar())) : ?>
+    <div id="actionBar" class="push_4 grid_20">
+        <?php echo $this->actionBar(); ?>
+    </div>
+    <?php endif; ?>
+    
+    <div id="footer" class="grid_24">
+    <?php
+        if (count($view->footer())) {
+            echo $view->footer();
+        }
+    ?>
+    </div>
+    <div class="clear"></div>
+    <?php if (Oft_Debug::isDebug()) : ?>
+    <div id="page-timer">
+        <?php echo $this->getAppProfiler()->getTime() / 1000; ?>s
+    </div>
+    <?php endif; ?>
+</div>
+</body>
+</html>

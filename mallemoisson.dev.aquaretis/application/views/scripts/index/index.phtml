@@ -1,0 +1,45 @@
+﻿<?php
+/**
+ * Vue par défaut de l'application
+ *
+ * @package App
+ */
+$this->subTitle('A propos de l\'application');
+?>
+<div class="container" style="text-align: center">
+	<img src="<?php echo $this->baseUrlMedia('arzf/images/logoentier-960x200.png');?>">
+	<h3>Solution de Télésurveillance des Réseaux AEP - Version ZF de Dev</h3>
+	<h4>AquaRetis est un logiciel de supervision des réseaux d'assainissement et d'eau potable</h4>
+	<h4>développé par it4env en partenariat avec <a href="http://www.credeau.com" target="blank">CREDEAU</a>,</h4>
+	<h4>bureau d'études techniques spécialisé dans la gestion des eaux urbaines,</h4>
+	<h4>et la commune de  <a href="http://www.mairie-mallemoisson.fr" target="blank">Mallemoisson</a></h4>
+</div>
+<div class="container" style="border-top: 1px solid #CCCCCC;">
+	<h3>Journal des évolutions</h3>
+	<table class="table table-bordered table-striped">
+		<thead><tr>
+			<th>Date</th>
+			<th>Modifications</th>
+		</tr></thead>
+		<tbody>
+			<tr>
+				<td>15/09/2012</td>
+				<td>Mise en prod de la première version :<br>
+					Modules d'administration, de configuration et de supervision sectorielle.
+				</td>
+			</tr>
+			<tr>
+				<td>02/11/2012</td>
+				<td>Ajout de la supervision "Environnement technique"<br>
+					Résolution du bug de redirection de fin de session<br>
+					Amélioration des styles
+				</td>
+			</tr>
+			<tr>
+				<td>09/11/2012</td>
+				<td>Ajout de la fonctionnalité d'exportation des données brutes<br>
+				</td>
+			</tr>
+			</tbody>
+	</table>
+</div>

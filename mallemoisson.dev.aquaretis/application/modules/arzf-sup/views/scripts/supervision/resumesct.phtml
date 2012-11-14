@@ -1,0 +1,143 @@
+<?php
+/**
+ * Vue par d�faut de l'application
+ *
+ * @package App
+ */
+$this->subTitle('Supervision > Vue sectorielle');
+$html = $this->html();
+
+$sectorsContent = '<div id="sectors" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">';
+foreach ($this->sectors as $sector)
+{
+    $sectorName = $sector['name'];
+    $sectorsContent .= '
+        <h3 class="sectorHead ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+            <span class="ui-icon ui-icon-triangle-1-e"></span>
+            <a href="#">'. $sectorName .'</a>
+        </h3>';
+    $sectorsContent .= '
+        <div class="row-fluid">
+    		<div id="dataj-1-'. $sector['id'] .'" class="joliebox-dataj-1 span6">data j-1</div>
+    		<div id="alarms-'.$sector['id'].'" class="joliebox-alarms span6">Fonctionnalité en cours de développement</div>
+    	</div>
+        <div id="'. $sector['id'] .'"class="content">
+	        <div id="daily-'. $sector['id'] .'" style="width: 940px; height: 500px">
+	            content
+	        </div>
+    		<div id="hourly-'. $sector['id'] .'" style="width: 940px; height: 400px">
+	            content
+	        </div>
+	        <div id="cptlist'. $sector['id'] .'" class="joliebox-cptlist">Fonctionnalité en cours de développement</div>
+        </div>';
+};
+$sectorsContent .= '</div>';
+echo $sectorsContent;
+
+?>
+<script type="text/javascript">
+//<!--
+$(document).ready(function() {
+    $('.plzwait').ajaxStart(function() { 
+        $('.plzwait').show(); 
+    });
+
+    $('.content').each(function(index){
+        var noId = ($(this).attr('id'));
+		$.getJSON('<?php echo $this->smartUrl('getsctdata') ?>'+'/noid/'+noId, function(data) {
+            
+            var vh = [], vj = [], dmn = [], dataLength = data.length, last = dataLength-1;
+            for (i=0; i<dataLength; i++) {
+
+            	vh.push([
+                    data[i][0]*1000, //le timestamp
+                    data[i][1] //le volume
+                ]);
+				
+                if (data[i][2]){
+                	vj.push([
+                             data[i][0]*1000, //le timestamp
+                             data[i][2] //le volume
+                    ]);
+                
+	                dmn.push([
+	                    data[i][0]*1000, //le timestamp
+	                    data[i][3] //le dmn
+	                ]);
+                }
+            }
+            $('#dataj-1-'+noId).text('Volume : '+vj.slice(-2)[0][1]+'m3 --- DMN : '+dmn.slice(-2)[0][1]+' m3');
+            
+            window['hourlychart'+noId] = new Highcharts.StockChart({
+                chart: {
+                    renderTo: 'hourly-'+noId,
+                    alignTicks: false
+                },
+                rangeSelector: {selected: 1},
+                yAxis: [{
+                    title: {text: 'Volume Horaire (m3)'},
+                    height: 200,
+                    min: 0
+                }],
+                series: [{
+                	name: 'vh',
+                	data: vh
+                }]
+            });
+                
+           	window['dailychart'+noId] = new Highcharts.StockChart({
+                chart: {
+                    renderTo: 'daily-'+noId,
+                    alignTicks: false
+                },
+                title: {text: 'Bilan du Secteur'},
+                rangeSelector: {selected: 1},
+                yAxis: [{
+                    title: {text: 'Volume Journalier (m3)'},
+                    height: 200,
+                    min: 0,
+                    offset: 0
+				},{
+                    title: {text: 'DMN (m3)'},
+                    top:300,
+                    height: 100,
+                    min: 0,
+                    offset: 0
+                }],
+                series: [{
+	                type: 'area',
+                	name: 'vj',
+                	data: vj
+                }, {
+                    type: 'column',
+                    name: 'dmn',
+                    yAxis: 1,
+                    data: dmn
+                }]
+			});
+		});
+		$.getJSON('<?php echo $this->smartUrl('getsctcptlist') ?>'+'/noid/'+noId, function(data) {
+			var instring = "Entrées : ", outstring = "--- Sorties : ", inlength = data[0].length, outlength = data[1].length;
+			for (i=0; i<inlength; i++) instring += data[0][i]+" ";
+			for (i=0; i<outlength; i++) outstring += data[1][i]+" ";
+			$('#cptlist'+noId).html('<a href=#>'+instring+outstring+'</a>');
+		});
+	});
+        
+   
+    $('#sectors .sectorHead').click(function() {
+        var content = $(this).next().next();
+        content.toggle('slow');
+        $("span.ui-icon-triangle-1-e", this).toggleClass('ui-icon-triangle-1-s');
+        var contentId = content.attr('id');
+        
+		return false;
+    }).next().next().hide();
+    
+    $('.plzwait').ajaxStop(function() { 
+            $(this).hide(); 
+    });
+        
+});
+//-->
+</script>

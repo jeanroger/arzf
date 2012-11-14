@@ -1,0 +1,34 @@
+; this is an INI file
+[global]
+menubar.network.name = 'Conf du réseau'
+
+menubar.network.submenu.site.name = "Sites"
+menubar.network.submenu.site.link.action = index
+menubar.network.submenu.site.link.controller = Sites
+menubar.network.submenu.site.link.module=arzf-network
+
+menubar.network.submenu.host.name = "Enregistreurs"
+menubar.network.submenu.host.link.action = index
+menubar.network.submenu.host.link.controller = hosts
+menubar.network.submenu.host.link.module=arzf-network
+
+menubar.network.submenu.host.submenu.input.name = "Entrées"
+menubar.network.submenu.host.submenu.input.link.action = index
+menubar.network.submenu.host.submenu.input.link.controller = host-inputs
+menubar.network.submenu.host.submenu.input.link.module=arzf-network
+
+menubar.network.submenu.flowcpt.name = "Compteurs"
+menubar.network.submenu.flowcpt.link.action = index
+menubar.network.submenu.flowcpt.link.controller = flowcounters
+menubar.network.submenu.flowcpt.link.module = arzf-network
+
+menubar.network.submenu.sector.name = "Secteurs"
+menubar.network.submenu.sector.link.action = index
+menubar.network.submenu.sector.link.controller = sectors
+menubar.network.submenu.sector.link.module=arzf-network
+
+menubar.network.submenu.confsector.name = "Conf Compteurs/Secteurs"
+menubar.network.submenu.confsector.link.action = index
+menubar.network.submenu.confsector.link.controller = flowcounters-sectors
+menubar.network.submenu.confsector.link.module=arzf-network
+

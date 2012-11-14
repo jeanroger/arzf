@@ -1,0 +1,51 @@
+<?php
+/**
+ * OFT Framework
+ *
+ * @package    Oft
+ * @subpackage Layouts
+ */
+
+// Récupération de la vue sous la variable $view
+$view = $this;
+
+// Type de contenu
+echo $view->doctype();
+?>
+<html>
+<head>
+<?php
+    echo $view->headTitle();
+    echo $view->headMeta();
+    echo $view->headLink();
+    echo $view->headStyle();
+    echo $view->headScript();
+    echo $view->jQuery();
+?>
+</head>
+<body >
+	<div class="container_24">
+		<div class="grid_24">
+			<center>
+				<img src="./images/logoentier-960x200.png">
+				<br>
+					<h3>Solution de Télésurveillance des Réseaux AEP - Version Zend de Dev</h3>
+				<br>
+				<h4>Vous devez être authentifié pour accéder à l'application</h4>
+				<br>
+            <?php
+                $flashMessages = $view->flashMessenger();
+                if (!empty($flashMessages)) {
+                    echo '<div id="messages">';
+                    echo $flashMessages;
+                    echo '</div>';
+                }
+            ?>
+				<div id="content">
+					<?php echo $view->layout()->content ?>
+				</div>
+		</div>
+	</div>
+
+</body>
+</html>

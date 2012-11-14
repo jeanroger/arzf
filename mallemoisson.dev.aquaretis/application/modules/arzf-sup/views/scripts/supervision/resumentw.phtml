@@ -1,0 +1,95 @@
+<?php
+/**
+ * Vue par défaut de l'application
+ *
+ * @package App
+ */
+$this->subTitle('Supervision globale du réseau');
+?>
+<style type="text/css"><!--/*--><![CDATA[/*><!--*/
+div#viewerDiv {
+width:900px;
+height:500px;
+background-color:white;
+background-image:url(http://api.ign.fr/geoportail/api/js/2.0.0/theme/geoportal/img/loading.gif);
+background-position:center center;
+background-repeat:no-repeat;
+}
+/*]]>*/--></style>
+
+<div id="viewerDiv"></div>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+//pour Firebug
+if (typeof console != "object") {
+  var console = {
+    'log': function () {}
+  };
+}
+
+window.onload= function() {
+	console.log("window.onload() debut");
+	const APIkey= 'vm977dqs5a6u03gcf2fae7dt';
+	
+	viewer= null;
+	function initMap() {
+	    //translate();
+	    var options= {
+	        mode:'normal',
+			territory:'FXX',
+			proxy:'http://mallemoisson.dev.aquaretis.com/ign/proxy.php?url='
+	    };
+
+	    viewer= new Geoportal.Viewer.Default('viewerDiv', OpenLayers.Util.extend(
+	        options,
+	        window.gGEOPORTALRIGHTSMANAGEMENT===undefined? {'apiKey':APIkey} : gGEOPORTALRIGHTSMANAGEMENT)
+	    );
+	    if (!viewer) {
+	        OpenLayers.Console.error(OpenLayers.i18n('new.instance.failed'));
+	        return;
+	    }
+
+	    //viewer.getMap().setProxyUrl('http://mallemoisson.dev.aquaretis.com/ign/proxy.php?url=');
+	    viewer.addGeoportalLayers(
+	    	    ['CADASTRALPARCELS.PARCELS'],
+	    	    {'CADASTRALPARCELS.PARCELS':{visibility:true, opacity: 1}});	
+	    viewer.getMap().setCenterAtLonLat(6.112703848203129,44.04317487710558,14);
+		var pc= viewer.getMap().getControlsByClass('Geoportal.Control.Projections')[0];
+		pc.setDisplayProjection('CRS:84');
+		$('.gpSelectProjections option[value="1"]').attr("selected", "selected");
+
+		var vlayer = new OpenLayers.Layer.Vector("Sectorisation");
+		viewer.getMap().addLayer(vlayer);
+		var json_format = new OpenLayers.Format.GeoJSON();
+
+		$.getJSON('<?php echo $this->smartUrl('getntwdata') ?>', function(data){
+			var features = json_format.read(data);
+		 	for(var i=0; i<features.length; ++i) {
+				features[i].geometry.transform(OpenLayers.Projection.CRS84, viewer.map.getProjection());
+			} 
+			vlayer.addFeatures(features);
+		});
+		
+		
+	}
+		
+	function loadAPI() {
+//	    if (checkApiLoading('loadAPI();',['OpenLayers','Geoportal','Geoportal.Viewer','Geoportal.Viewer.Default'])===false) {
+//	        return;
+//	    }
+	    
+	    Geoportal.GeoRMHandler.getConfig([APIkey], null,null, {
+	        onContractsComplete: initMap
+	    });
+	}
+	
+	loadAPI();
+};
+//--><!]]></script>
+
+<script
+type="text/javascript"
+src="http://api.ign.fr/geoportail/api/js/latest/GeoportalExtended.js">
+<!-- -->
+</script>
+
